@@ -1,0 +1,90 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+
+<div class="card shadow">
+
+<div class="card-body text-center">
+
+<h3>🚗 Camino Limpio</h3>
+
+<p class="text-muted">Servicio de Lavado</p>
+
+<hr>
+
+<p><strong>Cliente:</strong> 
+<%= lavado.cliente || 'Cliente' %>
+</p>
+
+<p><strong>Teléfono:</strong> 
+<%= lavado.telefono || '-' %>
+</p>
+
+<p><strong>Empleado:</strong> 
+<%= lavado.empleado || '-' %>
+</p>
+
+<hr>
+
+<p><strong>Placa:</strong> <%= lavado.placa %></p>
+
+<p><strong>Vehículo:</strong> 
+<%= lavado.vehiculo.charAt(0).toUpperCase() + lavado.vehiculo.slice(1) %>
+</p>
+
+<p><strong>Precio:</strong> 
+$<%= Number(lavado.precio).toLocaleString('es-CO') %>
+</p>
+
+<p><strong>Fecha:</strong> 
+<%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>
+</p>
+
+<hr>
+
+<button onclick="window.print()" class="btn btn-primary">
+🖨 Imprimir
+</button>
+
+<button onclick="enviarWhatsApp()" class="btn btn-success">
+📱 Enviar por WhatsApp
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+function enviarWhatsApp(){
+
+const mensaje = `🧾 *CAMINO LIMPIO*
+
+🚗 Servicio de Lavado
+
+👤 Cliente: *<%= lavado.cliente %>*
+📞 Teléfono: *<%= lavado.telefono %>*
+
+👷 Atendido por: *<%= lavado.empleado %>*
+
+🔢 Placa: *<%= lavado.placa %>*
+🚙 Vehículo: *<%= lavado.vehiculo %>*
+
+💰 Precio: *$<%= Number(lavado.precio).toLocaleString('es-CO') %>*
+
+📅 Fecha: *<%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>*
+
+Gracias por confiar en *Camino Limpio* 🚗
+Puerto Araujo - Santander`;
+
+const url = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+
+window.open(url, "_blank");
+
+}
+
+</script>
