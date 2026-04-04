@@ -11,6 +11,7 @@
     "grunt": "1.0.4",
     "nodemon": "^3.1.14",
     "sails": "^1.5.16",
+    "sails-disk": "^2.1.2",
     "sails-hook-grunt": "^5.0.0",
     "sails-hook-orm": "^4.0.3",
     "sails-hook-sockets": "^3.0.0",
