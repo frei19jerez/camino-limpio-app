@@ -7,8 +7,15 @@ module.exports = {
 
   datastores: {
     default: {
-      // Si luego usas PostgreSQL o MySQL en producción,
-      // aquí pondrás adapter y url.
+
+      adapter: 'sails-postgresql',
+
+      url: process.env.DATABASE_URL,
+
+      ssl: process.env.NODE_ENV === 'production'
+        ? { rejectUnauthorized: false }
+        : false
+
     },
   },
 
@@ -31,6 +38,9 @@ module.exports = {
   session: {
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
+
+      // Importante para DemoFlow y proxies
+      secure: false
     },
   },
 
@@ -46,13 +56,21 @@ module.exports = {
 
   http: {
     cache: 365.25 * 24 * 60 * 60 * 1000,
+
+    // Necesario detrás de Render / Proxy
     trustProxy: true,
   },
 
-  port: process.env.PORT,
+  // 🔥 IMPORTANTE PARA DEMOFLOW
+  port: process.env.PORT || 1337,
 
   custom: {
-    baseUrl: 'https://camino-limpio-app.onrender.com',
+
+    // URL dinámica
+    baseUrl:
+      process.env.BASE_URL ||
+      'https://demoflowapp.com/runtime/camino-limpio',
+
     internalEmailAddress: 'support@example.com',
   },
 
