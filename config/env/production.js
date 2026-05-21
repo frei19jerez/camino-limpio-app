@@ -8,13 +8,9 @@ module.exports = {
   datastores: {
     default: {
 
-      adapter: 'sails-postgresql',
-
-      url: process.env.DATABASE_URL,
-
-      ssl: process.env.NODE_ENV === 'production'
-        ? { rejectUnauthorized: false }
-        : false
+      // 🔥 Temporal para DemoFlow Runtime
+      // Evita errores de PostgreSQL mientras pruebas deploy automático
+      adapter: 'sails-disk'
 
     },
   },
@@ -39,7 +35,7 @@ module.exports = {
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
 
-      // Importante para DemoFlow y proxies
+      // Importante detrás de proxies
       secure: false
     },
   },
@@ -57,7 +53,7 @@ module.exports = {
   http: {
     cache: 365.25 * 24 * 60 * 60 * 1000,
 
-    // Necesario detrás de Render / Proxy
+    // Necesario para Render / DemoFlow
     trustProxy: true,
   },
 
