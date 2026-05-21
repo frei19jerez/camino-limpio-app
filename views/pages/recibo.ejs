@@ -2,57 +2,97 @@
 
 <div class="container mt-5">
 
-<div class="card shadow">
+  <div class="row justify-content-center">
 
-<div class="card-body text-center">
+    <div class="col-md-6">
 
-<h3>🚗 Camino Limpio</h3>
+      <div class="card shadow border-0">
 
-<p class="text-muted">Servicio de Lavado</p>
+        <div class="card-body text-center p-4">
 
-<hr>
+          <h2 class="mb-1">🚗 Camino Limpio</h2>
 
-<p><strong>Cliente:</strong> 
-<%= lavado.cliente || 'Cliente' %>
-</p>
+          <p class="text-muted mb-4">
+            Servicio Profesional de Lavado
+          </p>
 
-<p><strong>Teléfono:</strong> 
-<%= lavado.telefono || '-' %>
-</p>
+          <hr>
 
-<p><strong>Empleado:</strong> 
-<%= lavado.empleado || '-' %>
-</p>
+          <div class="text-start">
 
-<hr>
+            <p>
+              <strong>👤 Cliente:</strong><br>
+              <%= lavado.cliente || 'Cliente' %>
+            </p>
 
-<p><strong>Placa:</strong> <%= lavado.placa %></p>
+            <p>
+              <strong>📞 Teléfono:</strong><br>
+              <%= lavado.telefono || '-' %>
+            </p>
 
-<p><strong>Vehículo:</strong> 
-<%= lavado.vehiculo.charAt(0).toUpperCase() + lavado.vehiculo.slice(1) %>
-</p>
+            <p>
+              <strong>👷 Empleado:</strong><br>
+              <%= lavado.empleado || '-' %>
+            </p>
 
-<p><strong>Precio:</strong> 
-$<%= Number(lavado.precio).toLocaleString('es-CO') %>
-</p>
+            <hr>
 
-<p><strong>Fecha:</strong> 
-<%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>
-</p>
+            <p>
+              <strong>🔢 Placa:</strong><br>
+              <%= lavado.placa %>
+            </p>
 
-<hr>
+            <p>
+              <strong>🚙 Vehículo:</strong><br>
 
-<button onclick="window.print()" class="btn btn-primary">
-🖨 Imprimir
-</button>
+              <%= lavado.vehiculo.charAt(0).toUpperCase() + lavado.vehiculo.slice(1) %>
 
-<button onclick="enviarWhatsApp()" class="btn btn-success">
-📱 Enviar por WhatsApp
-</button>
+            </p>
 
-</div>
+            <p>
+              <strong>💰 Precio:</strong><br>
 
-</div>
+              $<%= Number(lavado.precio).toLocaleString('es-CO') %>
+
+            </p>
+
+            <p>
+              <strong>📅 Fecha:</strong><br>
+
+              <%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>
+
+            </p>
+
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-grid gap-2">
+
+            <button onclick="window.print()" class="btn btn-primary">
+              🖨 Imprimir Recibo
+            </button>
+
+            <button onclick="enviarWhatsApp()" class="btn btn-success">
+              📱 Enviar por WhatsApp
+            </button>
+
+            <a 
+              href="/runtime/camino-limpio-fj"
+              class="btn btn-secondary"
+            >
+              ⬅ Volver
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -81,7 +121,8 @@ const mensaje = `🧾 *CAMINO LIMPIO*
 Gracias por confiar en *Camino Limpio* 🚗
 Puerto Araujo - Santander`;
 
-const url = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+const url =
+"https://wa.me/?text=" + encodeURIComponent(mensaje);
 
 window.open(url, "_blank");
 

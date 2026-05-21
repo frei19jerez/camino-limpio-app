@@ -2,169 +2,199 @@
 
 <div class="container mt-4">
 
-<h1 class="mb-4">🚗 Camino Limpio - Panel</h1>
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
 
-<div class="row g-3">
+    <h1 class="mb-0">🚗 Camino Limpio - Panel</h1>
 
-<div class="col-md-3">
-<div class="card text-white bg-success shadow">
-<div class="card-body text-center">
-<h6>Total Hoy</h6>
-<h3>
-<%= new Intl.NumberFormat('es-CO',{
-style:'currency',
-currency:'COP'
-}).format(total) %>
-</h3>
-</div>
-</div>
-</div>
+    <a href="/runtime/camino-limpio-fj" class="btn btn-secondary">
+      ⬅ Volver al formulario
+    </a>
 
-<div class="col-md-3">
-<div class="card text-white bg-primary shadow">
-<div class="card-body text-center">
-<h6>Lavados Hoy</h6>
-<h3><%= lavados.length %></h3>
-</div>
-</div>
-</div>
+  </div>
 
-<div class="col-md-3">
-<div class="card text-dark bg-warning shadow">
-<div class="card-body text-center">
-<h6>🚗 Carros</h6>
-<h3><%= carros %></h3>
-</div>
-</div>
-</div>
+  <div class="row g-3">
 
-<div class="col-md-3">
-<div class="card text-white bg-dark shadow">
-<div class="card-body text-center">
-<h6>🏍 Motos</h6>
-<h3><%= motos %></h3>
-</div>
-</div>
-</div>
+    <div class="col-md-3">
+      <div class="card text-white bg-success shadow">
+        <div class="card-body text-center">
+          <h6>Total Hoy</h6>
 
-</div>
+          <h3>
+            <%= new Intl.NumberFormat('es-CO',{
+              style:'currency',
+              currency:'COP'
+            }).format(total) %>
+          </h3>
 
-<hr class="my-4">
+        </div>
+      </div>
+    </div>
 
-<div class="row g-3">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary shadow">
+        <div class="card-body text-center">
+          <h6>Lavados Hoy</h6>
+          <h3><%= lavados.length %></h3>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-4">
-<div class="card border-primary shadow">
-<div class="card-body text-center">
-<h6>👷 Pago Trabajador</h6>
-<h4>
-<%= new Intl.NumberFormat('es-CO',{
-style:'currency',
-currency:'COP'
-}).format(pagoTrabajador) %>
-</h4>
-</div>
-</div>
-</div>
+    <div class="col-md-3">
+      <div class="card text-dark bg-warning shadow">
+        <div class="card-body text-center">
+          <h6>🚗 Carros</h6>
+          <h3><%= carros %></h3>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-4">
-<div class="card border-warning shadow">
-<div class="card-body text-center">
-<h6>🧴 Gastos</h6>
-<h4>
-<%= new Intl.NumberFormat('es-CO',{
-style:'currency',
-currency:'COP'
-}).format(gastos) %>
-</h4>
-</div>
-</div>
-</div>
+    <div class="col-md-3">
+      <div class="card text-white bg-dark shadow">
+        <div class="card-body text-center">
+          <h6>🏍 Motos</h6>
+          <h3><%= motos %></h3>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-4">
-<div class="card border-success shadow">
-<div class="card-body text-center">
-<h6>👑 Administración</h6>
-<h4>
-<%= new Intl.NumberFormat('es-CO',{
-style:'currency',
-currency:'COP'
-}).format(gananciaAdmin) %>
-</h4>
-</div>
-</div>
-</div>
+  </div>
 
-</div>
+  <hr class="my-4">
 
-<hr class="my-4">
+  <div class="row g-3">
 
-<h4 class="mb-3">👨‍🔧 Lavados por Empleado</h4>
+    <div class="col-md-4">
+      <div class="card border-primary shadow">
+        <div class="card-body text-center">
 
-<ul class="list-group mb-4">
+          <h6>👷 Pago Trabajador</h6>
 
-<% for(let nombre in empleados){ %>
+          <h4>
+            <%= new Intl.NumberFormat('es-CO',{
+              style:'currency',
+              currency:'COP'
+            }).format(pagoTrabajador) %>
+          </h4>
 
-<li class="list-group-item d-flex justify-content-between">
-<strong><%= nombre %></strong>
-<span class="badge bg-primary">
-<%= empleados[nombre] %>
-</span>
-</li>
+        </div>
+      </div>
+    </div>
 
-<% } %>
+    <div class="col-md-4">
+      <div class="card border-warning shadow">
+        <div class="card-body text-center">
 
-</ul>
+          <h6>🧴 Gastos</h6>
 
-<h4 class="mb-3">📋 Historial</h4>
+          <h4>
+            <%= new Intl.NumberFormat('es-CO',{
+              style:'currency',
+              currency:'COP'
+            }).format(gastos) %>
+          </h4>
 
-<table class="table table-striped table-hover shadow">
+        </div>
+      </div>
+    </div>
 
-<thead class="table-dark">
+    <div class="col-md-4">
+      <div class="card border-success shadow">
+        <div class="card-body text-center">
 
-<tr>
-<th>Fecha</th>
-<th>Placa</th>
-<th>Vehículo</th>
-<th>Precio</th>
-<th>Empleado</th>
-</tr>
+          <h6>👑 Administración</h6>
 
-</thead>
+          <h4>
+            <%= new Intl.NumberFormat('es-CO',{
+              style:'currency',
+              currency:'COP'
+            }).format(gananciaAdmin) %>
+          </h4>
 
-<tbody>
+        </div>
+      </div>
+    </div>
 
-<% lavados.forEach(l => { %>
+  </div>
 
-<tr>
+  <hr class="my-4">
 
-<td>
-<%= new Date(l.fecha).toLocaleDateString('es-CO') %>
-</td>
+  <h4 class="mb-3">👨‍🔧 Lavados por Empleado</h4>
 
-<td><strong><%= l.placa %></strong></td>
+  <ul class="list-group mb-4">
 
-<td style="text-transform: capitalize">
-<%= l.vehiculo %>
-</td>
+    <% for(let nombre in empleados){ %>
 
-<td>
+      <li class="list-group-item d-flex justify-content-between">
 
-<%= new Intl.NumberFormat('es-CO',{
-style:'currency',
-currency:'COP'
-}).format(l.precio) %>
+        <strong><%= nombre %></strong>
 
-</td>
+        <span class="badge bg-primary">
+          <%= empleados[nombre] %>
+        </span>
 
-<td><%= l.empleado ? l.empleado.nombre : '—' %></td>
+      </li>
 
-</tr>
+    <% } %>
 
-<% }) %>
+  </ul>
 
-</tbody>
+  <h4 class="mb-3">📋 Historial</h4>
 
-</table>
+  <div class="table-responsive">
+
+    <table class="table table-striped table-hover shadow">
+
+      <thead class="table-dark">
+
+        <tr>
+          <th>Fecha</th>
+          <th>Placa</th>
+          <th>Vehículo</th>
+          <th>Precio</th>
+          <th>Empleado</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% lavados.forEach(l => { %>
+
+          <tr>
+
+            <td>
+              <%= new Date(l.fecha).toLocaleDateString('es-CO') %>
+            </td>
+
+            <td>
+              <strong><%= l.placa %></strong>
+            </td>
+
+            <td style="text-transform: capitalize">
+              <%= l.vehiculo %>
+            </td>
+
+            <td>
+
+              <%= new Intl.NumberFormat('es-CO',{
+                style:'currency',
+                currency:'COP'
+              }).format(l.precio) %>
+
+            </td>
+
+            <td>
+              <%= l.empleado ? l.empleado.nombre : '—' %>
+            </td>
+
+          </tr>
+
+        <% }) %>
+
+      </tbody>
+
+    </table>
+
+  </div>
 
 </div>
