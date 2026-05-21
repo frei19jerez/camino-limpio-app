@@ -4,6 +4,9 @@ module.exports = {
 
     try {
 
+      sails.log.info('🤖 IA Camino Limpio: Recibiendo datos del formulario...');
+      sails.log.info('📦 Body recibido:', req.body);
+
       let {
         cliente: nombreCliente,
         telefono,
@@ -13,43 +16,54 @@ module.exports = {
         precio
       } = req.body;
 
+      if (!nombreCliente || !telefono || !trabajador || !placa || !vehiculo || !precio) {
+        sails.log.warn('⚠️ IA Camino Limpio: Faltan datos obligatorios.');
+        return res.badRequest('Faltan datos para generar el recibo.');
+      }
+
       precio = Number(precio);
 
       let cliente = null;
       let empleado = null;
 
-      if (telefono) {
+      sails.log.info('👤 IA Camino Limpio: Buscando o creando cliente...');
 
-        cliente = await Cliente.findOne({
+      cliente = await Cliente.findOne({
+        telefono: telefono
+      });
+
+      if (!cliente) {
+
+        cliente = await Cliente.create({
+          nombre: nombreCliente || 'Cliente',
           telefono: telefono
-        });
+        }).fetch();
 
-        if (!cliente) {
+        sails.log.info('✅ Cliente creado:', cliente.nombre);
 
-          cliente = await Cliente.create({
-            nombre: nombreCliente || 'Cliente',
-            telefono: telefono
-          }).fetch();
-
-        }
-
+      } else {
+        sails.log.info('✅ Cliente encontrado:', cliente.nombre);
       }
 
-      if (trabajador) {
+      sails.log.info('👷 IA Camino Limpio: Buscando o creando empleado...');
 
-        empleado = await Empleado.findOne({
+      empleado = await Empleado.findOne({
+        nombre: trabajador
+      });
+
+      if (!empleado) {
+
+        empleado = await Empleado.create({
           nombre: trabajador
-        });
+        }).fetch();
 
-        if (!empleado) {
+        sails.log.info('✅ Empleado creado:', empleado.nombre);
 
-          empleado = await Empleado.create({
-            nombre: trabajador
-          }).fetch();
-
-        }
-
+      } else {
+        sails.log.info('✅ Empleado encontrado:', empleado.nombre);
       }
+
+      sails.log.info('🚗 IA Camino Limpio: Creando lavado...');
 
       const lavado = await Lavado.create({
         cliente: cliente ? cliente.id : null,
@@ -60,10 +74,17 @@ module.exports = {
         fecha: new Date().toLocaleDateString('es-CO')
       }).fetch();
 
-      return res.redirect('/runtime/camino-limpio-fj/recibo/' + lavado.id);
+      sails.log.info('✅ IA Camino Limpio: Recibo creado correctamente. ID:', lavado.id);
+
+      return res.redirect('../recibo/' + lavado.id);
 
     } catch(err) {
+
+      sails.log.error('❌ IA Camino Limpio: Error creando lavado.');
+      sails.log.error(err);
+
       return res.serverError(err);
+
     }
 
   },
@@ -71,94 +92,141 @@ module.exports = {
 
   recibo: async function(req, res) {
 
-    const lavado = await Lavado.findOne({
-      id: req.params.id
-    })
-    .populate('cliente')
-    .populate('empleado');
+    try {
 
-    if (!lavado) {
-      return res.notFound();
+      sails.log.info('🧾 IA Camino Limpio: Buscando recibo ID:', req.params.id);
+
+      const lavado = await Lavado.findOne({
+        id: req.params.id
+      })
+      .populate('cliente')
+      .populate('empleado');
+
+      if (!lavado) {
+        sails.log.warn('⚠️ IA Camino Limpio: Recibo no encontrado.');
+        return res.notFound();
+      }
+
+      sails.log.info('✅ IA Camino Limpio: Recibo encontrado.');
+
+      return res.view('pages/recibo', {
+        lavado
+      });
+
+    } catch(err) {
+
+      sails.log.error('❌ IA Camino Limpio: Error mostrando recibo.');
+      sails.log.error(err);
+
+      return res.serverError(err);
+
     }
-
-    return res.view('pages/recibo', {
-      lavado
-    });
 
   },
 
 
   lista: async function(req, res) {
 
-    const lavados = await Lavado.find()
-    .populate('cliente')
-    .populate('empleado');
+    try {
 
-    return res.view('pages/lavados', {
-      lavados
-    });
+      sails.log.info('📋 IA Camino Limpio: Listando lavados...');
+
+      const lavados = await Lavado.find()
+      .populate('cliente')
+      .populate('empleado');
+
+      return res.view('pages/lavados', {
+        lavados
+      });
+
+    } catch(err) {
+
+      sails.log.error('❌ IA Camino Limpio: Error listando lavados.');
+      sails.log.error(err);
+
+      return res.serverError(err);
+
+    }
 
   },
 
 
   panel: async function(req, res) {
 
-    const hoy = new Date().toLocaleDateString('es-CO');
+    try {
 
-    const lavados = await Lavado.find({
-      fecha: hoy
-    })
-    .populate('empleado')
-    .populate('cliente');
+      sails.log.info('📊 IA Camino Limpio: Cargando panel administrativo...');
 
-    let total = 0;
-    let carros = 0;
-    let motos = 0;
+      const hoy = new Date().toLocaleDateString('es-CO');
 
-    const empleados = {};
+      const lavados = await Lavado.find({
+        fecha: hoy
+      })
+      .populate('empleado')
+      .populate('cliente');
 
-    lavados.forEach(l => {
+      let total = 0;
+      let carros = 0;
+      let motos = 0;
 
-      const precio = Number(l.precio);
+      const empleados = {};
 
-      total += precio;
+      lavados.forEach(l => {
 
-      if (l.vehiculo === 'carro') {
-        carros++;
-      }
+        const precio = Number(l.precio);
 
-      if (l.vehiculo === 'moto') {
-        motos++;
-      }
+        total += precio;
 
-      if (l.empleado) {
-
-        const nombre = l.empleado.nombre;
-
-        if (!empleados[nombre]) {
-          empleados[nombre] = 0;
+        if (l.vehiculo === 'carro') {
+          carros++;
         }
 
-        empleados[nombre]++;
+        if (l.vehiculo === 'moto') {
+          motos++;
+        }
 
-      }
+        if (l.empleado) {
 
-    });
+          const nombre = l.empleado.nombre;
 
-    const pagoTrabajador = total * 0.35;
-    const gastos = 20000;
-    const gananciaAdmin = total - pagoTrabajador - gastos;
+          if (!empleados[nombre]) {
+            empleados[nombre] = 0;
+          }
 
-    return res.view('pages/panel', {
-      lavados,
-      total,
-      empleados,
-      carros,
-      motos,
-      pagoTrabajador,
-      gastos,
-      gananciaAdmin
-    });
+          empleados[nombre]++;
+
+        }
+
+      });
+
+      const pagoTrabajador = total * 0.35;
+      const gastos = 20000;
+      const gananciaAdmin = total - pagoTrabajador - gastos;
+
+      sails.log.info('✅ IA Camino Limpio: Panel cargado correctamente.');
+      sails.log.info('💰 Total:', total);
+      sails.log.info('🚗 Carros:', carros);
+      sails.log.info('🏍 Motos:', motos);
+
+      return res.view('pages/panel', {
+        lavados,
+        total,
+        empleados,
+        carros,
+        motos,
+        pagoTrabajador,
+        gastos,
+        gananciaAdmin
+      });
+
+    } catch(err) {
+
+      sails.log.error('❌ IA Camino Limpio: Error cargando panel.');
+      sails.log.error(err);
+
+      return res.serverError(err);
+
+    }
 
   }
 
