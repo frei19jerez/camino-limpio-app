@@ -25,9 +25,15 @@ module.exports = {
 
   security: {
     cors: {
-      // allowOrigins: [
-      //   'https://tu-dominio.com',
-      // ]
+
+      // 🔥 Permitir DemoFlow
+      allowOrigins: [
+        'https://demoflowapp.com',
+        'https://www.demoflowapp.com',
+        'http://localhost:1337',
+        'http://127.0.0.1:1337'
+      ]
+
     },
   },
 
@@ -41,9 +47,15 @@ module.exports = {
   },
 
   sockets: {
-    // onlyAllowOrigins: [
-    //   'https://tu-dominio.com',
-    // ],
+
+    // 🔥 NECESARIO EN PRODUCCIÓN
+    onlyAllowOrigins: [
+      'https://demoflowapp.com',
+      'https://www.demoflowapp.com',
+      'http://localhost:1337',
+      'http://127.0.0.1:1337'
+    ],
+
   },
 
   log: {
