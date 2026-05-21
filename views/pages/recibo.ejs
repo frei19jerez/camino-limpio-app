@@ -22,17 +22,17 @@
 
             <p>
               <strong>👤 Cliente:</strong><br>
-              <%= lavado.cliente || 'Cliente' %>
+              <%= lavado.cliente ? lavado.cliente.nombre : 'Cliente' %>
             </p>
 
             <p>
               <strong>📞 Teléfono:</strong><br>
-              <%= lavado.telefono || '-' %>
+              <%= lavado.cliente ? lavado.cliente.telefono : '-' %>
             </p>
 
             <p>
               <strong>👷 Empleado:</strong><br>
-              <%= lavado.empleado || '-' %>
+              <%= lavado.empleado ? lavado.empleado.nombre : '-' %>
             </p>
 
             <hr>
@@ -44,23 +44,17 @@
 
             <p>
               <strong>🚙 Vehículo:</strong><br>
-
               <%= lavado.vehiculo.charAt(0).toUpperCase() + lavado.vehiculo.slice(1) %>
-
             </p>
 
             <p>
               <strong>💰 Precio:</strong><br>
-
               $<%= Number(lavado.precio).toLocaleString('es-CO') %>
-
             </p>
 
             <p>
               <strong>📅 Fecha:</strong><br>
-
-              <%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>
-
+              <%= lavado.fecha %>
             </p>
 
           </div>
@@ -77,10 +71,7 @@
               📱 Enviar por WhatsApp
             </button>
 
-            <a 
-              href="/runtime/camino-limpio-fj"
-              class="btn btn-secondary"
-            >
+            <a href="../" class="btn btn-secondary">
               ⬅ Volver
             </a>
 
@@ -102,29 +93,29 @@
 
 function enviarWhatsApp(){
 
-const mensaje = `🧾 *CAMINO LIMPIO*
+  const mensaje = `🧾 *CAMINO LIMPIO*
 
 🚗 Servicio de Lavado
 
-👤 Cliente: *<%= lavado.cliente %>*
-📞 Teléfono: *<%= lavado.telefono %>*
+👤 Cliente: *<%= lavado.cliente ? lavado.cliente.nombre : 'Cliente' %>*
+📞 Teléfono: *<%= lavado.cliente ? lavado.cliente.telefono : '-' %>*
 
-👷 Atendido por: *<%= lavado.empleado %>*
+👷 Atendido por: *<%= lavado.empleado ? lavado.empleado.nombre : '-' %>*
 
 🔢 Placa: *<%= lavado.placa %>*
 🚙 Vehículo: *<%= lavado.vehiculo %>*
 
 💰 Precio: *$<%= Number(lavado.precio).toLocaleString('es-CO') %>*
 
-📅 Fecha: *<%= new Date(lavado.fecha).toLocaleDateString('es-CO') %>*
+📅 Fecha: *<%= lavado.fecha %>*
 
 Gracias por confiar en *Camino Limpio* 🚗
 Puerto Araujo - Santander`;
 
-const url =
-"https://wa.me/?text=" + encodeURIComponent(mensaje);
+  const url =
+  "https://wa.me/?text=" + encodeURIComponent(mensaje);
 
-window.open(url, "_blank");
+  window.open(url, "_blank");
 
 }
 
