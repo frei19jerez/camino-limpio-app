@@ -1,7 +1,7 @@
 module.exports.routes = {
 
-  '/': async function(req, res) {
-    return res.send('Servidor funcionando en Render 🔥');
+  '/': {
+    view: 'pages/homepage'
   },
 
   'POST /lavado/crear': 'LavadoController.crear',
