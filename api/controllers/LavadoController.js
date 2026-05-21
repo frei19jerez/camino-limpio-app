@@ -1,162 +1,155 @@
 module.exports = {
 
-  crear: async function(req,res){
+  crear: async function(req, res) {
 
     try {
 
-      let { nombreCliente, telefono, trabajador, placa, vehiculo, precio } = req.body
+      let {
+        cliente: nombreCliente,
+        telefono,
+        empleado: trabajador,
+        placa,
+        vehiculo,
+        precio
+      } = req.body;
 
-      precio = Number(precio)
+      precio = Number(precio);
 
-      let cliente = null
-      let empleado = null
+      let cliente = null;
+      let empleado = null;
 
-      /* =========================
-         CLIENTE
-      ========================= */
-
-      if(telefono){
+      if (telefono) {
 
         cliente = await Cliente.findOne({
           telefono: telefono
-        })
+        });
 
-        if(!cliente){
+        if (!cliente) {
 
           cliente = await Cliente.create({
             nombre: nombreCliente || 'Cliente',
             telefono: telefono
-          }).fetch()
+          }).fetch();
 
         }
 
       }
 
-      /* =========================
-         EMPLEADO
-      ========================= */
-
-      if(trabajador){
+      if (trabajador) {
 
         empleado = await Empleado.findOne({
           nombre: trabajador
-        })
+        });
 
-        if(!empleado){
+        if (!empleado) {
 
           empleado = await Empleado.create({
             nombre: trabajador
-          }).fetch()
+          }).fetch();
 
         }
 
       }
 
-      /* =========================
-         LAVADO
-      ========================= */
-
       const lavado = await Lavado.create({
-
         cliente: cliente ? cliente.id : null,
         empleado: empleado ? empleado.id : null,
         placa: placa.toUpperCase(),
         vehiculo,
         precio,
-        fecha: new Date().toLocaleDateString()
+        fecha: new Date().toLocaleDateString('es-CO')
+      }).fetch();
 
-      }).fetch()
+      return res.redirect('/runtime/camino-limpio-fj/recibo/' + lavado.id);
 
-      return res.redirect('/recibo/' + lavado.id)
-
-    } catch(err){
-      return res.serverError(err)
+    } catch(err) {
+      return res.serverError(err);
     }
 
   },
 
 
-  recibo: async function(req,res){
+  recibo: async function(req, res) {
 
     const lavado = await Lavado.findOne({
-      id:req.params.id
+      id: req.params.id
     })
     .populate('cliente')
-    .populate('empleado')
+    .populate('empleado');
 
-    if(!lavado){
-      return res.notFound()
+    if (!lavado) {
+      return res.notFound();
     }
 
-    return res.view('pages/recibo',{
+    return res.view('pages/recibo', {
       lavado
-    })
+    });
 
   },
 
 
-  lista: async function(req,res){
+  lista: async function(req, res) {
 
     const lavados = await Lavado.find()
     .populate('cliente')
-    .populate('empleado')
+    .populate('empleado');
 
-    return res.view('pages/lavados',{
+    return res.view('pages/lavados', {
       lavados
-    })
+    });
 
   },
 
 
-  panel: async function(req,res){
+  panel: async function(req, res) {
 
-    const hoy = new Date().toLocaleDateString()
+    const hoy = new Date().toLocaleDateString('es-CO');
 
     const lavados = await Lavado.find({
       fecha: hoy
     })
     .populate('empleado')
-    .populate('cliente')
+    .populate('cliente');
 
-    let total = 0
-    let carros = 0
-    let motos = 0
+    let total = 0;
+    let carros = 0;
+    let motos = 0;
 
-    const empleados = {}
+    const empleados = {};
 
     lavados.forEach(l => {
 
-      const precio = Number(l.precio)
+      const precio = Number(l.precio);
 
-      total += precio
+      total += precio;
 
-      if(l.vehiculo === 'carro'){
-        carros++
+      if (l.vehiculo === 'carro') {
+        carros++;
       }
 
-      if(l.vehiculo === 'moto'){
-        motos++
+      if (l.vehiculo === 'moto') {
+        motos++;
       }
 
-      if(l.empleado){
+      if (l.empleado) {
 
-        const nombre = l.empleado.nombre
+        const nombre = l.empleado.nombre;
 
-        if(!empleados[nombre]){
-          empleados[nombre] = 0
+        if (!empleados[nombre]) {
+          empleados[nombre] = 0;
         }
 
-        empleados[nombre]++
+        empleados[nombre]++;
 
       }
 
-    })
+    });
 
-    const pagoTrabajador = total * 0.35
-    const gastos = 20000
-    const gananciaAdmin = total - pagoTrabajador - gastos
+    const pagoTrabajador = total * 0.35;
+    const gastos = 20000;
+    const gananciaAdmin = total - pagoTrabajador - gastos;
 
-    return res.view('pages/panel',{
+    return res.view('pages/panel', {
       lavados,
       total,
       empleados,
@@ -165,7 +158,7 @@ module.exports = {
       pagoTrabajador,
       gastos,
       gananciaAdmin
-    })
+    });
 
   }
 
