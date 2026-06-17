@@ -1,15 +1,42 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<script>
+  const BASE_CAMINO = '/runtime/camino-limpio';
+
+  function volverFormularioIA() {
+    window.location.href = BASE_CAMINO;
+  }
+
+  function explicarPanelIA() {
+    alert(
+      '🤖 IA Camino Limpio\n\n' +
+      'Este panel muestra el resumen del día: total vendido, lavados realizados, carros, motos, pagos, gastos y ganancia administrativa.\n\n' +
+      'También permite revisar cuántos servicios hizo cada empleado y ver el historial de lavados registrados.'
+    );
+  }
+</script>
+
 <div class="container mt-4">
 
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
 
     <h1 class="mb-0">🚗 Camino Limpio - Panel</h1>
 
-    <a href="/runtime/camino-limpio-fj" class="btn btn-secondary">
-      ⬅ Volver al formulario
-    </a>
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="button" onclick="explicarPanelIA()" class="btn btn-primary">
+        🤖 IA explica panel
+      </button>
 
+      <button type="button" onclick="volverFormularioIA()" class="btn btn-secondary">
+        ⬅ Volver al formulario
+      </button>
+    </div>
+
+  </div>
+
+  <div class="alert alert-info shadow-sm">
+    🤖 <strong>IA Camino Limpio:</strong>
+    Este panel analiza automáticamente el rendimiento diario del lavadero.
   </div>
 
   <div class="row g-3">
@@ -18,14 +45,12 @@
       <div class="card text-white bg-success shadow">
         <div class="card-body text-center">
           <h6>Total Hoy</h6>
-
           <h3>
-            <%= new Intl.NumberFormat('es-CO',{
-              style:'currency',
-              currency:'COP'
+            <%= new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP'
             }).format(total) %>
           </h3>
-
         </div>
       </div>
     </div>
@@ -66,16 +91,13 @@
     <div class="col-md-4">
       <div class="card border-primary shadow">
         <div class="card-body text-center">
-
           <h6>👷 Pago Trabajador</h6>
-
           <h4>
-            <%= new Intl.NumberFormat('es-CO',{
-              style:'currency',
-              currency:'COP'
+            <%= new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP'
             }).format(pagoTrabajador) %>
           </h4>
-
         </div>
       </div>
     </div>
@@ -83,16 +105,13 @@
     <div class="col-md-4">
       <div class="card border-warning shadow">
         <div class="card-body text-center">
-
           <h6>🧴 Gastos</h6>
-
           <h4>
-            <%= new Intl.NumberFormat('es-CO',{
-              style:'currency',
-              currency:'COP'
+            <%= new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP'
             }).format(gastos) %>
           </h4>
-
         </div>
       </div>
     </div>
@@ -100,16 +119,13 @@
     <div class="col-md-4">
       <div class="card border-success shadow">
         <div class="card-body text-center">
-
           <h6>👑 Administración</h6>
-
           <h4>
-            <%= new Intl.NumberFormat('es-CO',{
-              style:'currency',
-              currency:'COP'
+            <%= new Intl.NumberFormat('es-CO', {
+              style: 'currency',
+              currency: 'COP'
             }).format(gananciaAdmin) %>
           </h4>
-
         </div>
       </div>
     </div>
@@ -120,18 +136,16 @@
 
   <h4 class="mb-3">👨‍🔧 Lavados por Empleado</h4>
 
-  <ul class="list-group mb-4">
+  <ul class="list-group mb-4 shadow-sm">
 
-    <% for(let nombre in empleados){ %>
+    <% for (let nombre in empleados) { %>
 
-      <li class="list-group-item d-flex justify-content-between">
-
+      <li class="list-group-item d-flex justify-content-between align-items-center">
         <strong><%= nombre %></strong>
 
-        <span class="badge bg-primary">
+        <span class="badge bg-primary rounded-pill">
           <%= empleados[nombre] %>
         </span>
-
       </li>
 
     <% } %>
@@ -145,7 +159,6 @@
     <table class="table table-striped table-hover shadow">
 
       <thead class="table-dark">
-
         <tr>
           <th>Fecha</th>
           <th>Placa</th>
@@ -153,7 +166,6 @@
           <th>Precio</th>
           <th>Empleado</th>
         </tr>
-
       </thead>
 
       <tbody>
@@ -161,7 +173,6 @@
         <% lavados.forEach(l => { %>
 
           <tr>
-
             <td>
               <%= new Date(l.fecha).toLocaleDateString('es-CO') %>
             </td>
@@ -175,18 +186,15 @@
             </td>
 
             <td>
-
-              <%= new Intl.NumberFormat('es-CO',{
-                style:'currency',
-                currency:'COP'
+              <%= new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP'
               }).format(l.precio) %>
-
             </td>
 
             <td>
               <%= l.empleado ? l.empleado.nombre : '—' %>
             </td>
-
           </tr>
 
         <% }) %>
