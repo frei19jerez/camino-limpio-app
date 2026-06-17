@@ -1,3 +1,4 @@
+```ejs
 <!DOCTYPE html>
 <html lang="es">
 
@@ -28,19 +29,16 @@
 
               <h2 class="mb-0">🚗 Camino Limpio</h2>
 
-              <a href="/runtime/camino-limpio-fj/panel" class="btn btn-success">
+              <button type="button" onclick="irA('/panel')" class="btn btn-success">
                 📊 Ver Panel
-              </a>
+              </button>
 
             </div>
 
-            <form method="POST" action="/runtime/camino-limpio-fj/lavado/crear">
+            <form method="POST" id="formLavado">
 
-              <!-- NOMBRE CLIENTE -->
               <div class="mb-3">
-
                 <label class="form-label">Nombre Cliente</label>
-
                 <input
                   type="text"
                   name="cliente"
@@ -48,33 +46,24 @@
                   placeholder="Freimel"
                   required
                 >
-
               </div>
 
-              <!-- TELEFONO -->
               <div class="mb-3">
-
                 <label class="form-label">Teléfono Cliente</label>
-
-                <input 
+                <input
                   type="text"
                   name="telefono"
                   class="form-control"
                   placeholder="573001234567"
                   required
                 >
-
                 <small class="text-muted">
                   Formato: 573001234567
                 </small>
-
               </div>
 
-              <!-- NOMBRE TRABAJADOR -->
               <div class="mb-3">
-
                 <label class="form-label">Trabajador</label>
-
                 <input
                   type="text"
                   name="empleado"
@@ -82,15 +71,11 @@
                   placeholder="Carlos"
                   required
                 >
-
               </div>
 
-              <!-- PLACA -->
               <div class="mb-3">
-
                 <label class="form-label">Placa</label>
-
-                <input 
+                <input
                   type="text"
                   name="placa"
                   id="placa"
@@ -99,30 +84,20 @@
                   required
                   style="text-transform: uppercase;"
                 >
-
               </div>
 
-              <!-- VEHICULO -->
               <div class="mb-3">
-
                 <label class="form-label">Vehículo</label>
-
                 <select name="vehiculo" id="vehiculo" class="form-select" required>
-
                   <option value="">Seleccione</option>
                   <option value="carro">Carro</option>
                   <option value="moto">Moto</option>
-
                 </select>
-
               </div>
 
-              <!-- PRECIO -->
               <div class="mb-3">
-
                 <label class="form-label">Precio</label>
-
-                <input 
+                <input
                   name="precio"
                   id="precio"
                   type="number"
@@ -131,9 +106,7 @@
                   required
                   min="0"
                 >
-
                 <small class="text-muted" id="precioTexto"></small>
-
               </div>
 
               <button type="submit" class="btn btn-primary w-100">
@@ -154,39 +127,56 @@
 
   <script>
 
-    const placa = document.getElementById("placa")
+    function baseRuntime() {
+      const partes = window.location.pathname.split('/').filter(Boolean);
 
-    placa.addEventListener("input", function(){
-      this.value = this.value.toUpperCase()
-    })
+      if (partes[0] === 'runtime' && partes[1]) {
+        return '/runtime/' + partes[1];
+      }
+
+      return '';
+    }
+
+    function irA(ruta) {
+      window.location.href = baseRuntime() + ruta;
+    }
+
+    const formLavado = document.getElementById('formLavado');
+    formLavado.action = baseRuntime() + '/lavado/crear';
+
+    const placa = document.getElementById('placa');
+
+    placa.addEventListener('input', function () {
+      this.value = this.value.toUpperCase();
+    });
 
     const precios = {
       moto: 20000,
       carro: 50000
-    }
+    };
 
-    const vehiculo = document.getElementById("vehiculo")
-    const precio = document.getElementById("precio")
-    const precioTexto = document.getElementById("precioTexto")
+    const vehiculo = document.getElementById('vehiculo');
+    const precio = document.getElementById('precio');
+    const precioTexto = document.getElementById('precioTexto');
 
-    vehiculo.addEventListener("change", function(){
+    vehiculo.addEventListener('change', function () {
+      const tipo = this.value;
 
-      const tipo = this.value
-
-      if(precios[tipo]){
-
-        precio.value = precios[tipo]
+      if (precios[tipo]) {
+        precio.value = precios[tipo];
 
         precioTexto.innerText =
-          "Precio sugerido: $" +
-          precios[tipo].toLocaleString('es-CO')
-
+          'Precio sugerido: $' +
+          precios[tipo].toLocaleString('es-CO');
+      } else {
+        precio.value = '';
+        precioTexto.innerText = '';
       }
-
-    })
+    });
 
   </script>
 
 </body>
 
 </html>
+```
